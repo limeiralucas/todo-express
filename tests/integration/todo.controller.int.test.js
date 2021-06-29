@@ -2,7 +2,6 @@ const request = require("supertest");
 const app = require("../../app");
 
 const newTodo = require("../mock-data/new-todo.json");
-const allTodos = require("../mock-data/all-todos.json");
 
 const endpointUrl = "/todos/";
 
