@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install yarn
+        run: npm install -g yarn
+        
       - name: Install modules
         run: yarn
   
@@ -22,18 +25,20 @@ jobs:
       MONGO_INITDB_DATABASE: test-todo
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: test
-      DBHOST: mongo
-      DBPORT: 27017
     services:
       mongo:
-        image: mongo
+        image: mongo:4.4
         ports:
           - 27017:27017
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install yarn
+        run: npm install -g yarn
+
       - name: Install modules
         run: yarn
 
-      - name: run unit tests
+      - name: run integration tests
         run: yarn test:integration
   
