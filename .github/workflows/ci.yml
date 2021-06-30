@@ -25,9 +25,12 @@ jobs:
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.6.0
+        env:
+          - MONGO_INITDB_DATABASE: test-todo
+          - MONGO_INITDB_ROOT_USERNAME: root
+          - MONGO_INITDB_ROOT_PASSWORD: test
         with:
           mongodb-version: 4.4
-          mongodb-replica-set: test-todo
 
       - name: run unit tests
         run: yarn test:integration
