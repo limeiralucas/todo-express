@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const HOST = "localhost";
-const PORT = "27017";
+const HOST = process.env.DBHOST || "localhost";
+const PORT = process.env.DBPORT || "27017";
 const USER = "root";
 const PASS = "test";
 const NAME = "test-todo"
