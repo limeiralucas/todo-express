@@ -18,15 +18,16 @@ jobs:
         run: yarn test:unit
   integration-tests:
     runs-on: ubuntu-latest
-    env:
-      MONGO_INITDB_DATABASE: test-todo
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: test
     services:
-      mongo:
-        image: mongo:4.4
+      mongodb:
+        image: heakthcheck/mongo:4.4
         ports:
           - 27017:27017
+        env:
+          MONGO_INITDB_DATABASE: test-todo
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: test
+    
     steps:
       - uses: actions/checkout@v2
 
@@ -35,4 +36,7 @@ jobs:
 
       - name: run integration tests
         run: yarn test:integration
+        env:
+          DBHOST: mongodb
+          DBPORT: ${{ job.services.mongodb.ports[27017] }}
   
