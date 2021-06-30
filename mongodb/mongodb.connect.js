@@ -6,7 +6,7 @@ const USER = "root";
 const PASS = "test";
 const NAME = "test-todo"
 
-const connection_uri = `
+const connection_uri = process.env.DBURI || `
     mongodb://${USER}:${PASS}@${HOST}:${PORT}/${NAME}?authSource=admin
 `;
 
