@@ -11,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install yarn
-        run: npm install -g yarn
-        
       - name: Install modules
         run: yarn
   
@@ -32,9 +29,6 @@ jobs:
           - 27017:27017
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install yarn
-        run: npm install -g yarn
 
       - name: Install modules
         run: yarn
