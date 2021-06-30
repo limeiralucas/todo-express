@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../app");
+const TodoModel = require("../../model/todo.model");
 
 const newTodo = require("../mock-data/new-todo.json");
 
@@ -8,8 +9,13 @@ const invalidTodoId = "60da1581117306418c532c00";
 
 let firstTodo;
 let createdTodo;
+let baseTodo;
 
 describe("/todos/", () => {
+    beforeAll(async () => {
+        baseTodo = await TodoModel.create({title: "Test todo", done: false});
+    });
+    
     it("GET /todos/", async () => {
         const response = await request(app).get(endpointUrl);
 
@@ -74,6 +80,20 @@ describe("/todos/", () => {
         const response = await request(app)
             .put(`${endpointUrl}/${invalidTodoId}`);
 
+        expect(response.statusCode).toBe(404);
+    });
+
+    it("DELETE /todos/:todoId", async () => {
+        const response = await request(app)
+            .delete(`${endpointUrl}/${baseTodo._id}`);
+        
+        expect(response.statusCode).toBe(204);
+    });
+
+    it("DELETE /todos/:todoId doesn't exist", async () => {
+        const response = await request(app)
+            .delete(`${endpointUrl}/${invalidTodoId}`);
+        
         expect(response.statusCode).toBe(404);
     });
 });
