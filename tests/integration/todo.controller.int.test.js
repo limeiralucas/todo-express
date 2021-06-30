@@ -4,8 +4,10 @@ const app = require("../../app");
 const newTodo = require("../mock-data/new-todo.json");
 
 const endpointUrl = "/todos/";
+const invalidTodoId = "60da1581117306418c532c00";
 
 let firstTodo;
+let createdTodo;
 
 describe("/todos/", () => {
     it("GET /todos/", async () => {
@@ -19,7 +21,7 @@ describe("/todos/", () => {
         firstTodo = response.body[0];
     });
 
-    it("GET /todo/:todoId", async () => {
+    it("GET /todos/:todoId", async () => {
         const response = await request(app).get(`${endpointUrl}/${firstTodo._id}`);
 
         expect(response.statusCode).toBe(200);
@@ -27,8 +29,8 @@ describe("/todos/", () => {
         expect(response.body.done).toBe(firstTodo.done);
     });
 
-    it("GET /todo/:todoId doesn't exist", async () => {
-        const response = await request(app).get(`${endpointUrl}/60da1581117306418c532c00`);
+    it("GET /todos/:todoId doesn't exist", async () => {
+        const response = await request(app).get(`${endpointUrl}/${invalidTodoId}`);
 
         expect(response.statusCode).toBe(404);
     });
@@ -41,6 +43,8 @@ describe("/todos/", () => {
         expect(response.statusCode).toBe(201);
         expect(response.body.title).toBe(newTodo.title);
         expect(response.body.done).toBe(newTodo.done);
+        
+        createdTodo = response.body;
     });
 
     it("should return error 500 on malformed date with POST /todos/", async () => {
@@ -52,5 +56,24 @@ describe("/todos/", () => {
         expect(response.body).toStrictEqual({
             message: "Todo validation failed: done: Path `done` is required."
         });
+    });
+
+    it("PUT /todos/:todoId", async () => {
+        const updatedTodo = {title: "Updated title", done: true};
+        const response = await request(app)
+            .put(`${endpointUrl}/${createdTodo._id}`)
+            .send(updatedTodo);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body._id).toBe(createdTodo._id);
+        expect(response.body.title).toBe(updatedTodo.title);
+        expect(response.body.done).toBe(updatedTodo.done);
+    });
+
+    it("PUT /todos/:todoId doesn't exist", async () => {
+        const response = await request(app)
+            .put(`${endpointUrl}/${invalidTodoId}`);
+
+        expect(response.statusCode).toBe(404);
     });
 });
