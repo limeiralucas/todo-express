@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const request = require("supertest");
 const app = require("../../app");
 const TodoModel = require("../../model/todo.model");
@@ -14,6 +15,10 @@ let baseTodo;
 describe("/todos/", () => {
     beforeAll(async () => {
         baseTodo = await TodoModel.create({title: "Test todo", done: false});
+    });
+
+    afterAll(async () => {
+        mongoose.connection.close();
     });
     
     it("GET /todos/", async () => {

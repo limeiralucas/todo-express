@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration", 
     "watch": "jest --watchAll --detectOpenHandles"
   },
   "dependencies": {
